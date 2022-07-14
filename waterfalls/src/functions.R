@@ -143,27 +143,53 @@ prep_for_graphing <- function(waterfalls_df){
   waterfalls_graphing_df <- waterfalls_graphing_df %>%
     group_by(state) %>%
     arrange((drop_ft), desc(id)) %>%
-    mutate(drop_cum = cumsum(drop_ft))
+    mutate(drop_cum = -cumsum(drop_ft))
   
   # Add in order that they should be graphed by
   waterfalls_graphing_df <- waterfalls_graphing_df %>%
     group_by(state) %>%
     arrange(desc(drop_cum)) %>%
     mutate(waterfall_number = row_number())
+  
+  # Calculate rectangle bounding boxes
+  waterfalls_graphing_df <- waterfalls_graphing_df %>%
+    group_by(state) %>%
+    mutate(rect_xmin = 0, 
+           rect_xmax = waterfall_number,
+           rect_ymin = min(drop_cum),
+           rect_ymax = drop_cum)
 }
 
 # Making main waterfall graph
 plot_waterfalls <- function(waterfalls_graphing_df, out_file){
-  ggplot(data = waterfalls_graphing_df, 
+  
+  # type face
+  font_legend <- 'Shadows Into Light'
+  font_add_google(font_legend)
+  showtext_opts(dpi = 300)
+  showtext_auto()
+  
+  # calculate splash points
+  splashesimage <- magick::image_read("in/waterfall_icons-02.png")
+  
+  main <- ggplot(data = waterfalls_graphing_df, 
          aes(x = waterfall_number, y = drop_cum, group = state))+
-    geom_step(color = "#BDCCD4")+
-    geom_step(data = waterfalls_graphing_df %>% filter(state %in% c("Washington")), color = "#0069B5")+
+    geom_ribbon(aes(xmin = rect_xmin, xmax = rect_xmax,
+                  ymin = rect_ymin, ymax = rect_ymax),
+                alpha = 0.1, fill = "#6ab8fa")+
+    geom_step(color = "#6ab8fa")+
     theme_tufte()+
     ylab("Waterfall Drop (ft)")+
     xlab("# of Waterfalls")
   
+  ggdraw() + 
+    draw_plot(main) + 
+    draw_image(image = "in/waterfall_falling.png", x = 0.17, y = 0.95, width = .03, halign = 0, valign = 0)+
+    draw_label("Let's go chasing waterfalls!", x = 0.43, y = 0.96, fontfamily = font_legend, size = 12)+
+    draw_image(image = splashesimage, x = 0.88, y = 0.01, width = 0.13, height = 0.12)
+  
   ggsave(filename = out_file,
          width = 1600, 
-         height = 1600, 
-         dpi = 300, units = "px")
+         height = 5400, 
+         dpi = 300, units = "px", bg  = "white")
 }

@@ -4,7 +4,8 @@ library(targets)
 options(tidyverse.quiet = TRUE)
 tar_option_set(packages = c('tidyverse', 'sbtools', 'geojsonR', 'sp','sf', 'waterfall', 
                             'ggthemes', 'readr', 
-                            'geojsonio', 'USAboundaries', 'purrr', 'jsonlite'))
+                            'geojsonio', 'USAboundaries', 'purrr', 'jsonlite',
+                            'cowplot', 'showtext', 'ggimage'))
 
 source("src/functions.R")
 
