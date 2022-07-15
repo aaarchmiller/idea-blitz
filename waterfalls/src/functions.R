@@ -169,9 +169,6 @@ plot_waterfalls <- function(waterfalls_graphing_df, out_file){
   showtext_opts(dpi = 300)
   showtext_auto()
   
-  # calculate splash points
-  splashesimage <- magick::image_read("in/waterfall_icons-02.png")
-  
   main <- ggplot(data = waterfalls_graphing_df, 
          aes(x = waterfall_number, y = drop_cum, group = state))+
     geom_ribbon(aes(xmin = rect_xmin, xmax = rect_xmax,
@@ -184,12 +181,27 @@ plot_waterfalls <- function(waterfalls_graphing_df, out_file){
   
   ggdraw() + 
     draw_plot(main) + 
-    draw_image(image = "in/waterfall_falling.png", x = 0.17, y = 0.95, width = .03, halign = 0, valign = 0)+
-    draw_label("Let's go chasing waterfalls!", x = 0.43, y = 0.96, fontfamily = font_legend, size = 12)+
-    draw_image(image = splashesimage, x = 0.88, y = 0.01, width = 0.13, height = 0.12)
+    # Top panel y: 0.80-1.00
+    draw_label("Let's go chasing waterfalls!", x = 0.55, y = 0.97, fontfamily = font_legend, size = 12)+
+    draw_image(image = "in/waterfall_icons-01.png", x = 0.25, y = 0.945, width = .03, halign = 0, valign = 0)+
+    
+    # Second panel down y: 0.60-0.80
+
+    # Third panel down HALF WAY y: 0.40-0.60
+    # Fourth panel down y: 0.20-0.40
+    draw_label("Did you know that the largest\nwaterfall in the contiguous\nUSA is in Washington?",
+               x = 0.08, y = 0.18, fontfamily = font_legend, size = 10, hjust = 0, vjust = 0)+
+    draw_label("It's called\nColonial Creek Waterfall\nand it's the height of\n2 Empire State Buildings!",
+               x = 0.6, y = 0.15, fontfamily = font_legend, size = 10, hjust = 0, vjust = 0)+
+    # Fifth panel down y: 0.00-0.20
+    draw_image(image = "in/waterfall_icons-02.png", x = 0.908, y = 0.06, width = 0.08, height = 0.08)
+  
+    
+    
+    
   
   ggsave(filename = out_file,
-         width = 1600, 
-         height = 5400, 
+         width = 1200, 
+         height = 675*5, 
          dpi = 300, units = "px", bg  = "white")
 }
