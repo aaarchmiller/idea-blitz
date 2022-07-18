@@ -54,4 +54,4 @@ bloom-bubbles/in/NGWOS Ecology Data KSummers/
 waterfalls/in/us_waterfalls.csv
 hydrotech-highlight/_targets/*
 hydrotech-highlight/out
-hydrotech-highlight/tmp
+hydrotech-highlight/*.html

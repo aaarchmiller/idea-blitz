@@ -1,0 +1,29 @@
+---
+title: "Current example visuals"
+author: "Lindsay Platt"
+date: '2022-07-07'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+options(tidyverse.quiet = TRUE)
+```
+
+## Top 5 sites and their best friends!
+
+```{r visits_bff, height = 5, width = 10}
+print(p3_bff_bars_gg)
+```
+
+## Hydrotechs visit no matter the distance
+
+```{r visits_distance, height = 5, width = 8}
+print(p3_distance_violins_gg)
+```
+
+## Hydrotechs visit 'round the clock
+
+```{r visits_time, height = 5, width = 5}
+print(p3_timing_radial_gg)
+```
